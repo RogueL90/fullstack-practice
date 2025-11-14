@@ -6,6 +6,7 @@ return(
 )
 }
 const Display = (props) => <p>{props.value}</p>
+
 const App = () => {
   const [value, setValue] = useState(10)
   const setToValue = (val) => {
