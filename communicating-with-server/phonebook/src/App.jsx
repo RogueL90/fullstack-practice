@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 
 const App = () => {
-  const [persons, setPersons] = useState([{name: 'Monkey D. Luffy', number : '154-221-4550'}])
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("")
   const [filtered, setFiltered] = useState(false)
@@ -9,12 +10,15 @@ const App = () => {
   
   const Display = ({persons}) => {
     const arr = !filtered ? persons : persons.filter(person => person.name === searchValue);
-    setSearchValue("");
     if(arr.length===0) return (<p>No results</p>)
       return(
         arr.map(person => <p key={person.number}>{person.name}, {person.number}</p>)
       )
   }
+
+  useEffect(() => {
+    axios.get('http://localhost:3001/persons').then(response => setPersons(response.data))
+  }, [])
 
   const handleNewName = (event) => setNewName(event.target.value);
   const handleNewNumber = (event) => setNewNumber(event.target.value);
