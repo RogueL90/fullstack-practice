@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import personService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -8,16 +8,28 @@ const App = () => {
   const [filtered, setFiltered] = useState(false)
   const [searchValue, setSearchValue] = useState("")
   
+  const handleDelete = (id) => {
+    if(!window.confirm("you sure you wanna delete ts?")) return;
+    personService.deleteEntry(id)
+    .then(response => setPersons(persons.filter(person => person.id !== id)));
+  }
+
   const Display = ({persons}) => {
     const arr = !filtered ? persons : persons.filter(person => person.name === searchValue);
     if(arr.length===0) return (<p>No results</p>)
       return(
-        arr.map(person => <p key={person.number}>{person.name}, {person.number}</p>)
+        arr.map(person => {
+          return (
+            <div key={person.id}>
+            <p >{person.name}, {person.number}</p> <button  onClick = {() => {handleDelete(person.id)}} >delete</button>
+            </div>
+          )
+        })
       )
   }
 
   useEffect(() => {
-    axios.get('http://localhost:3001/persons').then(response => setPersons(response.data))
+    personService.getAll().then(response => setPersons(response))
   }, [])
 
   const handleNewName = (event) => setNewName(event.target.value);
@@ -33,13 +45,23 @@ const App = () => {
       console.log(newName, 'is already in the book')
       return;
     }
-    const newArr = [
-      ...persons,
+    if(persons.some(person => person.number === newNumber)){
+      if(!window.confirm("This number is already in the phonebook. Override the name associated with it?"))return;
+      const idOfDup = persons.filter(person => person.number === newNumber)[0].id;
+      personService.changeName(idOfDup, newName).then(response => {
+        const newArr = persons.map(person => person.id!==response.id ? person : response);
+        setPersons(newArr);
+      });
+      setNewName("");
+      setNewNumber("");
+      return;
+    }
+    const newEntry = 
       {name: newName,
         number: newNumber
       }
-    ]
-    setPersons(newArr);
+    personService.createEntry(newEntry)
+    .then(response => setPersons(persons.concat(response)));
     setNewName("");
     setNewNumber("");
   }
