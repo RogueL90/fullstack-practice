@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
+import Notification from './Components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -7,6 +8,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("")
   const [filtered, setFiltered] = useState(false)
   const [searchValue, setSearchValue] = useState("")
+  const [errorMessage, setErrorMessage] = useState(null);
   
   const handleDelete = (id) => {
     if(!window.confirm("you sure you wanna delete ts?")) return;
@@ -52,6 +54,10 @@ const App = () => {
         const newArr = persons.map(person => person.id!==response.id ? person : response);
         setPersons(newArr);
       });
+      setErrorMessage(
+      `Name changed of number ${newNumber} to ${newName}!`
+    )
+    setTimeout(() => {setErrorMessage(null)}, 3000);
       setNewName("");
       setNewNumber("");
       return;
@@ -62,8 +68,12 @@ const App = () => {
       }
     personService.createEntry(newEntry)
     .then(response => setPersons(persons.concat(response)));
+    setErrorMessage(
+      `Entry added in the phonebook for ${newName}!`
+    )
     setNewName("");
     setNewNumber("");
+    setTimeout(() => {setErrorMessage(null)}, 3000);
   }
 
   const handleFilter = (event) => {
@@ -79,6 +89,7 @@ const App = () => {
   return(
     <div>
       <h2>Phonebook</h2>
+      <Notification message = {errorMessage} />
       <div>
         <form onSubmit = {handleFilter}>
           <div>
