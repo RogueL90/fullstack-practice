@@ -1,11 +1,19 @@
 import {useState, useEffect} from 'react'
+import axios from 'axios'
+import WeatherInfo from './WeatherInfo'
 const SearchResults = (props) => {
     const [selected, setSelected]  = useState(null);
     useEffect(() =>{
         setSelected(null)
     }
         ,[props])
+ const getWeatherData = (props) => {
+            const url = props.weatherurl;
+            return axios.get(url).then(response => <p>response.data</p>)
+
+        }
 const showCountry = (country) => {
+
     return(
         <div>
             <h1>
@@ -24,12 +32,14 @@ const showCountry = (country) => {
             <img src = {country.flags.png} />
             <div>
                 <h2>
-                    Weather in {country.name.common} (to be added)
+                    Weather in {country.name.common} 
                 </h2>
+                <WeatherInfo country = {country} />
             </div>
         </div>
     )
 }
+
     const list = props.list;
     if(selected) return showCountry(selected);
     if(list.length==0) return <p>No results</p>
