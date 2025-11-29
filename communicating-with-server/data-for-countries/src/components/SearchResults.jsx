@@ -32,7 +32,7 @@ const showCountry = (country) => {
             <img src = {country.flags.png} />
             <div>
                 <h2>
-                    Weather in {country.name.common} 
+                    Weather in {country.capital} 
                 </h2>
                 <WeatherInfo country = {country} />
             </div>
