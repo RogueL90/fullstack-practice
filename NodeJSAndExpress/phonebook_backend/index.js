@@ -1,9 +1,10 @@
 const express = require('express')
 const morgan = require('morgan')
+const cors = require('cors')
 const app = express()
 
 app.use(express.json())
-
+app.use(cors())
 morgan.token('body', function (req) {
   return JSON.stringify(req.body)
 })
@@ -83,7 +84,7 @@ app.post('/api/persons', (request, response) => {
   })
     }
     persons = persons.concat(newPerson);
-    response.status(204).end();
+    response.status(201).json(newPerson);
 })
 
 app.use(unknownEndpoint)
