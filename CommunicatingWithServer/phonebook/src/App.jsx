@@ -19,6 +19,7 @@ const App = () => {
   const Display = ({persons}) => {
     const arr = !filtered ? persons : persons.filter(person => person.name === searchValue);
     if(arr.length===0) return (<p>No results</p>)
+      console.log(persons)
       return(
         arr.map(person => {
           return (
@@ -66,11 +67,10 @@ const App = () => {
       {name: newName,
         number: newNumber
       }
-    personService.createEntry(newEntry)
-    .then(response => setPersons(persons.concat(response)));
-    setErrorMessage(
-      `Entry added in the phonebook for ${newName}!`
-    )
+    personService.createEntry(newEntry).then(created => {
+      console.log("created:", created)
+      setPersons(prev => prev.concat(created))
+    })
     setNewName("");
     setNewNumber("");
     setTimeout(() => {setErrorMessage(null)}, 3000);

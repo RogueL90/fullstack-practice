@@ -11,6 +11,8 @@
   "author": "Pranay Jain",
   "license": "ISC",
   "dependencies": {
-    "express": "^5.2.1"
+    "cors": "^2.8.5",
+    "express": "^5.2.1",
+    "mongoose": "^9.1.5"
   }
 }

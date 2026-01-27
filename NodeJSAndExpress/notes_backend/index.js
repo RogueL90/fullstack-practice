@@ -1,9 +1,20 @@
 const express = require('express')
+const cors = require('cors')
 const app = express()
 
 app.use(express.json())
-
+app.use(cors())
 const generateId = () => String((notes.length>0 ? Math.max(...notes.map(note => Number(note.id))) : 0)+1);
+
+const requestLogger = (request, response, next) => {
+  console.log('Method:', request.method)
+  console.log('Path:  ', request.path)
+  console.log('Body:  ', request.body)
+  console.log('---')
+  next()
+}
+app.use(requestLogger)
+
 
 let notes = [
   {
@@ -29,7 +40,7 @@ app.get('/', (request, response) => {
 
 app.get('/api/notes', (request, response) => {
   response.json(notes)
-})
+})  
 
 app.get('/api/notes/:id', (request, response) => {
   const id = request.params.id
@@ -37,7 +48,7 @@ app.get('/api/notes/:id', (request, response) => {
   if(note){
 response.json(note)
   }else{
-    response.status(404).end()
+    response.status(404).end() 
   }
 })
 
@@ -65,7 +76,7 @@ app.post('/api/notes', (request, response) => {
   response.json(note)
 })
 
-const PORT = 3001
+const PORT = process.env.port || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
