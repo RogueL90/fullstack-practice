@@ -16,7 +16,18 @@ const personSchema = new mongoose.Schema({
     number: String,
 })
 
-const Person = new mongoose.model('Person', personSchema)
+const Person = mongoose.model('Person', personSchema)
+
+if(process.argv.length===3){
+    Person.find({}).then(result => {
+        result.forEach(person => {
+            console.log(person)
+        })
+    }).finally(res => {
+        mongoose.connection.close()
+    process.exit(1)
+    })
+}
 
 const newPerson = new Person({
     name: process.argv[3],
