@@ -1,7 +1,9 @@
+require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const app = express()
+const Person = require('./model/person')
 
 app.use(express.json())
 app.use(cors())
@@ -43,7 +45,9 @@ let persons = [
 const generateId = () => String(Math.random());
 
 app.get('/api/persons', (request, response) => {
-    response.json(persons);
+  Person.find({}).then(res =>{
+    response.json(res)
+  })
 })
 
 app.get('/info', (request, response) => {
@@ -65,26 +69,28 @@ app.delete('/api/persons/:id', (request, response) => {
 
 app.post('/api/persons', (request, response) => {
     const body = request.body;
-    const newPerson = {
+    const newPerson = Person({
         name: body.name, 
         number: body.number,
-        id: generateId()
-    };
+    })
     if(!body.name || !body.number){
         console.log('name or number missing');
         return response.status(400).json({ 
     error: 'content missing' 
   })
     }
-    const duplicateCheck = persons.filter(person => person.name ===body.name);
-    if(duplicateCheck.length!=0){
-        console.log('no duplicate name');
+    Person.find({name: body.name}).then(after => {
+      if(after.length!=0){
+        console.log(after);
         return response.status(400).json({ 
     error: 'no dup names' 
   })
     }
-    persons = persons.concat(newPerson);
-    response.status(201).json(newPerson);
+    newPerson.save().then(res => {
+      response.status(201).json(res);
+    })
+    })
+    
 })
 
 app.use(unknownEndpoint)
