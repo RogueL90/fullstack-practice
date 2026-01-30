@@ -10,7 +10,7 @@ Content-Type: application/json
 ###
 DELETE http://localhost:3001/api/notes/697c271b8de6461182a09c6f
 ###
-PUT http://localhost:3001/api/notes/
+PUT http://localhost:3001/api/notes/697ad60fa64c506053b8530f
 Content-Type: application/json
 
  {
