@@ -17,8 +17,9 @@ const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
 
+// No longer needed after implementation of mongoDB which auto generates an ID for each document
 
-
+/*
 let persons = [
     { 
       "id": "1",
@@ -43,6 +44,7 @@ let persons = [
 ]
 
 const generateId = () => String(Math.random());
+*/
 
 app.get('/api/persons', (request, response) => {
   Person.find({}).then(res =>{
@@ -50,21 +52,43 @@ app.get('/api/persons', (request, response) => {
   })
 })
 
-app.get('/info', (request, response) => {
+app.get('/info', (request, response, next) => {
     const date = new Date()
-    response.send(`<p>Phonebook has info for ${persons.length} people</p><p>${date.toDateString()} ${date.toLocaleTimeString()}</p>`)
+    Person.find({})
+    .then(people => {
+      response.send(`<p>Phonebook has info for ${people.length} people</p><p>${date.toDateString()} ${date.toLocaleTimeString()}</p>`)
+    }).catch(err => next(err))
 })
 
-app.get('/api/persons/:id', (request, response) => {
-    const id = request.params.id;
-    const person = persons.filter(person => person.id===id);
-    response.json(person);
+app.get('/api/persons/:id', (request, response, next) => {
+    Person.findById(request.params.id)
+    .then(person => {
+      if(!person){
+        response.status(404).end()
+      }
+      response.json(person)
+    }).catch(err => next(err))
 })
 
-app.delete('/api/persons/:id', (request, response) => {
-    const id = request.params.id;
-    persons = persons.filter(person => person.id !== id);
-    response.status(204).end();
+app.delete('/api/persons/:id', (request, response, next) => {
+    Person.findByIdAndDelete(request.params.id)
+    .then(res => {
+      console.log(res)
+      response.status(204).end();
+    }).catch(err => next(err))
+})
+
+app.put('/api/persons/:id', (request, response, next) => {
+  Person.findById(request.params.id)
+  .then(person => {
+    if(!person){
+      return response.status(404).end()
+    }
+    person.name = request.body.name
+    return person.save()
+    .then(updatedPerson => response.json(updatedPerson))
+  })
+  .catch(err => next(err))
 })
 
 app.post('/api/persons', (request, response) => {
@@ -94,6 +118,18 @@ app.post('/api/persons', (request, response) => {
 })
 
 app.use(unknownEndpoint)
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } 
+
+  next(error)
+}
+
+app.use(errorHandler)
 
 const PORT = 3001;
 app.listen(PORT, () => {

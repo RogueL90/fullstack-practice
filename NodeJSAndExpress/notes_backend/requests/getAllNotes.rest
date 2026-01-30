@@ -4,8 +4,16 @@ POST http://localhost:3001/api/notes
 Content-Type: application/json
 
  {
-    "content": "THIS IS THE FOURTH NOTE",
+    "content": "THIS IS THE NINTH NOTE",
     "important": true
   }
+###
+DELETE http://localhost:3001/api/notes/697c271b8de6461182a09c6f
+###
+PUT http://localhost:3001/api/notes/
+Content-Type: application/json
 
-  
+ {
+    "content": "I am a changed man1",
+    "important": true
+  }
