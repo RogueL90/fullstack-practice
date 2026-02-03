@@ -4,7 +4,7 @@ const url = 'http://localhost:3001/api/persons'
 
 const createEntry = (entryObject) => {
     const request = axios.post(url, entryObject);
-    return request.then(response => response.data)
+    return request
 }
 
 const getAll = () => {

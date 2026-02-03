@@ -14,6 +14,8 @@ const App = () => {
     if(!window.confirm("you sure you wanna delete ts?")) return;
     personService.deleteEntry(id)
     .then(response => setPersons(persons.filter(person => person.id !== id)));
+    setErrorMessage("Removed person from directory.")
+    setTimeout(() => {setErrorMessage(null)}, 3000)
   }
 
   const Display = ({persons}) => {
@@ -67,9 +69,15 @@ const App = () => {
       {name: newName,
         number: newNumber
       }
-    personService.createEntry(newEntry).then(created => {
+    personService.createEntry(newEntry)
+    .then(response => response.data)
+    .then(created => {
       console.log("created:", created)
       setPersons(prev => prev.concat(created))
+      setErrorMessage(`Number added for ${newName}`)
+    })
+    .catch(err => {
+      setErrorMessage(err.response.data.error)
     })
     setNewName("");
     setNewNumber("");
