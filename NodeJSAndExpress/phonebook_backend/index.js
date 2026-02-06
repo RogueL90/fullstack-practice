@@ -91,7 +91,7 @@ app.put('/api/persons/:id', (request, response, next) => {
   .catch(err => next(err))
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
     const body = request.body;
     const newPerson = Person({
         name: body.name, 
@@ -110,11 +110,11 @@ app.post('/api/persons', (request, response) => {
     error: 'no dup names' 
   })
     }
-    newPerson.save().then(res => {
+    return newPerson.save().then(res => {
       response.status(201).json(res);
     })
     })
-    
+    .catch(err => next(err))
 })
 
 app.use(unknownEndpoint)
@@ -124,7 +124,9 @@ const errorHandler = (error, request, response, next) => {
 
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
-  } 
+  } else if (error.name === 'ValidationError'){
+    return response.status(400).send({ error: error.message })
+  }
 
   next(error)
 }
