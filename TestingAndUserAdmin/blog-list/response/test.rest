@@ -6,7 +6,7 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "title": "Blog 1",
+    "title": "Blog 2",
     "author": "David Taylor",
     "url": "https://www.themarthablog.com/",
     "likes": 57
