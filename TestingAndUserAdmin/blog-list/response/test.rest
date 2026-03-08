@@ -6,8 +6,17 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "title": "Blog 2",
+    "title": "Blog 3",
     "author": "David Taylor",
     "url": "https://www.themarthablog.com/",
     "likes": 57
+}
+###
+DELETE http://localhost:3003/api/blogs/69ad2b30505390201e161041
+###
+PUT http://localhost:3003/api/blogs/6990f821fd38609c47ab7163
+Content-Type: application/json
+
+{
+    "likes": 68
 }
