@@ -7,7 +7,8 @@ Content-Type: application/json
 
  {
     "content": "testNote1",
-    "important": true
+    "important": true,
+    "userId": "69ae20a56ffeb101174dcb9f"
   }
 ###
 DELETE http://localhost:3001/api/notes/69ab8c4478b522c05932ae30
@@ -18,4 +19,14 @@ Content-Type: application/json
  {
     "content": "I am a changed man1",
     "important": true
+  }
+###
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+ {
+    "username": "Monkey D Luffy",
+    "name": "Rogue",
+    "password": "gomuGomu123"
+
   }
