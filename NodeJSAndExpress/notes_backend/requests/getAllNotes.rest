@@ -25,8 +25,17 @@ POST http://localhost:3001/api/users
 Content-Type: application/json
 
  {
-    "username": "Monkey D Luffy",
+    "username": "Dragon",
     "name": "Rogue",
-    "password": "gomuGomu123"
+    "password": "123"
 
   }
+
+###
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+  "username": "Dragon",
+  "password": "123"
+}
