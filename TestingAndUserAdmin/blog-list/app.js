@@ -1,4 +1,5 @@
 const blogRouter = require('./controllers/blogs')
+const usersRouter = require('./controllers/users')
 const express = require('express')
 require('dotenv').config()
 const mongoose = require('mongoose')
@@ -15,5 +16,6 @@ mongoose.connect(mongoUrl, { family: 4 })
 app.use(express.json())
 
 app.use('/api/blogs', blogRouter)
+app.use('/api/users', usersRouter)
 
 module.exports = app

@@ -20,3 +20,12 @@ Content-Type: application/json
 {
     "likes": 68
 }
+
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+    "username": "Law",
+    "name": "Water",
+    "password": "1234"
+}
