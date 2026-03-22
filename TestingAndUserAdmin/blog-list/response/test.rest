@@ -6,7 +6,7 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "title": "Blog 3",
+    "title": "Blog 6",
     "author": "David Taylor",
     "url": "https://www.themarthablog.com/",
     "likes": 57
@@ -20,7 +20,7 @@ Content-Type: application/json
 {
     "likes": 68
 }
-
+###
 POST http://localhost:3003/api/users
 Content-Type: application/json
 
@@ -29,3 +29,5 @@ Content-Type: application/json
     "name": "Water",
     "password": "1234"
 }
+###
+GET http://localhost:3003/api/users
